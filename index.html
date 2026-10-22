@@ -206,11 +206,17 @@ function buildPagination(total, page){
   document.getElementById('feed').insertAdjacentHTML('afterend', html);
 }
 function goPage(n){
-  const total = (isSearchActive ? allArticles.filter(a=> (a.title||'').toLowerCase().includes(document.getElementById('searchInput').value.trim().toLowerCase()) || (a.summary||'').toLowerCase().includes(document.getElementById('searchInput').value.trim().toLowerCase())) : allArticles).length;
+  const total = (isSearchActive ? allArticles.filter(a=> {
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    return (a.title||'').toLowerCase().includes(q) || (a.summary||'').toLowerCase().includes(q) || (a.source||'').toLowerCase().includes(q);
+  }) : allArticles).length;
   const pages = Math.max(1, Math.ceil(total/PER_PAGE));
   if(n<1||n>pages) return;
   currentPage = n;
-  const list = isSearchActive ? allArticles.filter(a=> (a.title||'').toLowerCase().includes(document.getElementById('searchInput').value.trim().toLowerCase()) || (a.summary||'').toLowerCase().includes(document.getElementById('searchInput').value.trim().toLowerCase())) : allArticles;
+  const list = isSearchActive ? allArticles.filter(a=> {
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    return (a.title||'').toLowerCase().includes(q) || (a.summary||'').toLowerCase().includes(q) || (a.source||'').toLowerCase().includes(q);
+  }) : allArticles;
   renderPage(list, currentPage);
   document.getElementById('feed').scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -219,7 +225,9 @@ function performSearch(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   if(!q){clearSearch(); return;}
   isSearchActive = true;
-  const filtered = allArticles.filter(a=> (a.title||'').toLowerCase().includes(q) || (a.summary||'').toLowerCase().includes(q));
+  const filtered = allArticles.filter(a=> {
+    return (a.title||'').toLowerCase().includes(q) || (a.summary||'').toLowerCase().includes(q) || (a.source||'').toLowerCase().includes(q);
+  });
   document.getElementById('status').textContent = `Search: ${filtered.length} results for "${q}"`;
   currentPage = 1; renderPage(filtered, currentPage);
 }
