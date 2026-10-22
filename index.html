@@ -46,7 +46,7 @@
 <div class="container">
   <h2 id="webtool" style="font-size:1.25rem;font-weight:700;margin-bottom:.5rem;">Webtool</h2>
   <div class="toolbar">
-    <input id="searchInput" type="text" placeholder="Search headlines / summaries…" aria-label="Search" />
+    <input id="searchInput" type="text" placeholder="Search headlines / summaries…" aria-label="Search" onkeydown="if(event.key==='Enter'){performSearch();}" />
     <button onclick="performSearch()">Search</button>
     <button class="secondary" onclick="clearSearch()">Clear</button>
     <button onclick="fetchArticles()">Refresh</button>
@@ -57,29 +57,99 @@
 
 <script>
 const RSS_FEEDS = [
+  // Original core
   "https://feeds.bbci.co.uk/news/world/rss.xml",
+  "https://feeds.bbci.co.uk/news/technology/rss.xml",
+  "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
+  "https://feeds.bbci.co.uk/news/health/rss.xml",
+  "https://feeds.bbci.co.uk/news/business/rss.xml",
+  "https://feeds.bbci.co.uk/news/politics/rss.xml",
+  "https://feeds.bbci.co.uk/news/uk/rss.xml",
   "https://feeds.nbcnews.com/nbcnews/public/news",
+  "https://feeds.cbsnews.com/news/cbsnews/world",
+  "https://feeds.foxnews.com/foxnews/world",
+  "https://edition.cnn.com/services/rss/edition_world.rss",
+  "https://www.cnn.com/services/rss/edition/world/rss.xml",
+  "https://feeds.npr.org/1001/rss.xml",
+  "https://feeds.reuters.com/reuters/topNews",
+  "https://feeds.a.dj.com/rss/RSSWorldNews.xml",
+  "https://feeds.feedburner.com/techcrunch/",
+  "https://feeds.arstechnica.com/arstechnica/index",
+  "https://www.wired.com/feed/rss",
+  "https://feeds.bbci.co.uk/news/world/rss.xml",
+  // Americas
   "https://www.nytimes.com/svc/collections/v1/publish/https://www.nytimes.com/section/world/rss.xml",
   "https://feeds.washingtonpost.com/rss/world",
   "https://globalnews.ca/world/feed/",
-  "http://www.buenosairesherald.com/rss",
+  "https://www.buenosairesherald.com/rss",
+  "https://feeds.ap.org/rss",
+  "https://www.npr.org/sections/world/rss.json", // note: using rss.xml if needed; skip json
+  // Europe
   "http://www.theguardian.com/world/rss",
+  "https://www.theguardian.com/world/rss",
   "https://www.france24.com/en/rss",
   "https://www.spiegel.de/international/index.rss",
   "https://www.euronews.com/rss?format=mrss&level=theme&name=news",
   "https://www.independent.co.uk/news/world/rss",
+  "https://feeds.dw.com/rdf/rss-en-world",
+  "https://www.lemonde.fr/rss/planete.xml",
+  "https://elpais.com/rss/cualeser_usa.xml",
+  "https://www.repubblica.it/rss/homepage/rss2.xml",
+  "https://www.tagesanzeiger.ch/rss/",
+  "https://feeds.nos.nl/nosjournaal/main.xml",
+  // Middle East / Africa
   "https://www.aljazeera.com/xml/rss/all.xml",
+  "https://www.timesofisrael.com/feed/",
+  "https://mg.co.za/feed/",
+  "https://www.dailynewsegypt.com/feed/",
+  "https://www.africanews.com/feed/",
+  // Asia / Oceania
   "https://www.japantimes.co.jp/feed/top-stories/",
   "https://www.scmp.com/rss/91/feed",
   "https://timesofindia.indiatimes.com/rssfeeds/296589292.cms",
-  "https://mg.co.za/feed/",
-  "https://www.dailynewsegypt.com/feed/",
-  "https://www.smh.com.au/rss/world.xml"
+  "https://www.smh.com.au/rss/world.xml",
+  "https://www.chinadaily.com.cn/rss/world.xml",
+  "https://www.asahi.com/ajw/rss/",
+  "https://bangkokpost.com/rss/data/topstories.xml",
+  "https://jakartaglobe.id/feed/",
+  // Science / Health / Tech / Politics / Business extras
+  "https://www.nature.com/rss/latest.xml",
+  "https://feeds.feedburner.com/sciencedaily",
+  "https://feeds.feedburner.com/ScienceDaily-Technology",
+  "https://feeds.feedburner.com/ScienceDaily-Science",
+  "https://www.sciencedaily.com/rss/top/science.xml",
+  "https://feeds.feedburner.com/TheEconomist",
+  "https://feeds.feedburner.com/economist",
+  "https://feeds.feedburner.com/ft/world",
+  "https://feeds.feedburner.com/ft/europe",
+  "https://feeds.feedburner.com/ft/business",
+  "https://feeds.feedburner.com/ft/technology",
+  "https://feeds.feedburner.com/ft/politics",
+  "https://feeds.feedburner.com/ft/asia",
+  "https://feeds.feedburner.com/ft/middle-east-africa",
+  "https://feeds.feedburner.com/ft/americas",
+  "https://feeds.feedburner.com/ft/china",
+  "https://feeds.feedburner.com/ft/indian-business",
+  "https://feeds.feedburner.com/ft/markets",
+  "https://feeds.feedburner.com/ft/markets-asia",
+  "https://feeds.feedburner.com/ft/markets-us",
+  "https://feeds.feedburner.com/ft/markets-europe",
+  "https://feeds.feedburner.com/ft/companies-technology",
+  "https://feeds.feedburner.com/ft/companies-health-care",
+  "https://feeds.feedburner.com/ft/companies-industrial",
+  "https://feeds.feedburner.com/ft/companies-energy",
+  // Additional world
+  "https://feeds.reuters.com/reuters/businessNews",
+  "https://feeds.reuters.com/reuters/technologyNews",
+  "https://feeds.reuters.com/reuters/scienceNews",
+  "https://feeds.reuters.com/reuters/healthNews",
+  "https://feeds.reuters.com/reuters/entertainmentNews",
+  "https://feeds.reuters.com/reuters/sportsNews"
 ];
 let allArticles = [];
 let isSearchActive = false;
 let currentPage = 1;
-const PER_PAGE = 20;
+const PER_PAGE = 50;
 
 function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
 function cleanSummary(html){try{return html.replace(/<[^>]+>/g,'').trim();}catch(e){return (html||'').toString();}}
