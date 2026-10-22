@@ -108,8 +108,7 @@ function renderPage(articles,page){
     const art=document.createElement('article');
     art.innerHTML=`<h2><a href="${escapeHtml(a.link)}" target="_blank" rel="noopener">${escapeHtml(a.title)}</a></h2>
       <div class="meta">Source: ${escapeHtml(a.source)} — ${escapeHtml(a.date||'No date')}</div>
-      <p>${escapeHtml(a.summary)}</p>
-      <span class="tag">News</span>`;
+      <p>${escapeHtml(a.summary)}</p>`;
     feed.appendChild(art);
   });
   buildPagination(articles.length,page);
