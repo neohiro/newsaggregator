@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>NewsAggregator — Global News Feed</title>
+<title>NewsAggregator — Live Global Feed</title>
 <style>
   :root{--bg:#23272a;--surface:#40444b;--text:#fff;--accent:#7289da;--muted:#99aab5;--frame:#2c2f33;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -39,7 +39,7 @@
 </head>
 <body>
 <header>
-  <h1>NewsAggregator</h1>
+  <h1>NewsAggregator — Live Global Feed</h1>
   <p>Global News Feed with search — ported to webtool at <code>neohiro.github.io/NewsAggregator</code></p>
 </header>
 
@@ -156,7 +156,8 @@ function cleanSummary(html){try{return html.replace(/<[^>]+>/g,'').trim();}catch
 
 async function fetchFeed(url){
   try{
-    const r = await fetch(url, {mode:'cors'});
+    const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
+    const r = await fetch(proxyUrl, {mode:'cors'});
     if(!r.ok) return [];
     const text = await r.text();
     const xml = new DOMParser().parseFromString(text, 'application/xml');
