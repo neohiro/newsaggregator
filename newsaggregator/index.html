@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NewsAggregator — Webtool</title>
+<style>
+  :root{--bg:#0b0d12;--surface:#13141a;--text:#e6e8f0;--accent:#3b82f6;--muted:#8a92a3;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45;}
+  header{padding:2rem 1.5rem 1rem;max-width:860px;margin:0 auto;}
+  header h1{font-size:2rem;letter-spacing:-.02em;font-weight:700;}
+  header p{color:var(--muted);margin-top:.25rem;}
+  main{max-width:860px;margin:0 auto;padding:0 1.5rem 3rem;}
+  .feed{display:grid;gap:1rem;}
+  article{background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:1rem 1.25rem;}
+  article h2{font-size:1.05rem;font-weight:600;margin-bottom:.25rem;}
+  article .meta{font-size:.8rem;color:var(--muted);margin-bottom:.5rem;}
+  article p{color:#c2c6d6;font-size:.95rem;}
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  .tag{display:inline-block;padding:.15rem .45rem;border-radius:9999px;font-size:.75rem;background:rgba(59,130,246,.15);color:#93c5fd;margin-top:.5rem;}
+</style>
+</head>
+<body>
+<header>
+  <h1>NewsAggregator</h1>
+  <p>Webtool version at <a href="https://neohiro.github.io/newsaggregator">neohiro.github.io/newsaggregator</a></p>
+</header>
+<main>
+  <section aria-label="Aggregated feed" class="feed">
+    <article>
+      <h2><a href="https://github.com/neohiro/NewsAggregator">NewsAggregator repo</a></h2>
+      <div class="meta">Source: github.com/neohiro/NewsAggregator • Updated today</div>
+      <p>Aggregated news and updates from the project. Use this webtool to browse feeds, filter by source, and read summaries.</p>
+      <span class="tag">Webtool</span>
+    </article>
+    <article>
+      <h2>Quick actions</h2>
+      <div class="meta">Built for <code>neohiro.github.io/newsaggregator</code></div>
+      <p>Refresh feed · Filter by tag · Export as JSON · Subscribe via RSS.</p>
+      <span class="tag">Beta</span>
+    </article>
+  </section>
+</main>
+</body>
+</html>
