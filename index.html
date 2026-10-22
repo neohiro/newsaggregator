@@ -88,24 +88,14 @@ let allArticles=[]; let isSearchActive=false; let currentPage=1; const PER_PAGE=
 function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
 function cleanSummary(html){try{return html.replace(/<[^>]+>/g,'').trim();}catch(e){return (html||'').toString();}}
 
-async function fetchFeed(url){
-  try{
-    const r = await fetch(url, {mode:'cors'});
-    if(!r.ok) return [];
-    const text=await r.text();
-    const xml=new DOMParser().parseFromString(text,'application/xml');
-    const items=xml.querySelectorAll('item');
-    const feedName=xml.querySelector('channel > title')?.textContent||url;
-    const out=[];
-    items.forEach(it=>{
-      const title=it.querySelector('title')?.textContent||'No Title';
-      const link=it.querySelector('link')?.textContent||'#';
-      const summary=it.querySelector('description')?.textContent||it.querySelector('summary')?.textContent||it.querySelector('content\:encoded')?.textContent||'No summary.';
-      const pub=it.querySelector('pubDate')?.textContent||'';
-      out.push({title,link,summary:cleanSummary(summary),source:feedName,date:pub,id:Math.random().toString(36).slice(2)});
-    });
-    return out;
-  }catch(e){console.error('Fetch error',url,e);return [];}
+function loadFromJSON(){
+  fetch('articles.json',{cache:'no-store'}).then(r=>r.json()).then(data=>{
+    allArticles=data.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
+    document.getElementById('status').textContent=`Displaying ${allArticles.length} articles.`;
+    document.getElementById('lastLoad').textContent=new Date().toLocaleString();
+    buildTags();
+    renderPage(allArticles,currentPage);
+  }).catch(e=>{document.getElementById('status').textContent='Failed to load articles.json. Refresh to retry.';console.error(e);});
 }
 
 function renderPage(articles,page){
@@ -163,15 +153,7 @@ function fetchArticles(){
   document.getElementById('feed').innerHTML='<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
   document.getElementById('pagination').innerHTML='';
   allArticles=[];isSearchActive=false;currentTag='';currentPage=1;document.getElementById('searchInput').value='';
-  const results=Promise.all(RSS_FEEDS.map(url=>fetchFeed(url)));
-  results.then(async arr=>{
-    arr.forEach(list=>allArticles=allArticles.concat(list));
-    allArticles.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
-    document.getElementById('status').textContent=`Displaying ${allArticles.length} articles.`;
-    document.getElementById('lastLoad').textContent=new Date().toLocaleString();
-    buildTags();
-    renderPage(allArticles,currentPage);
-  });
+  loadFromJSON();
 }
 function exportJSON(){const blob=new Blob([JSON.stringify(allArticles,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='newsaggregator-'+new Date().toISOString().slice(0,10)+'.json';a.click();}
 </script>
