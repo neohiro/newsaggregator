@@ -104,6 +104,8 @@ const RSS_FEEDS = [
 ];
 let allArticles = [];
 let isSearchActive = false;
+let currentPage = 1;
+const PER_PAGE = 20;
 
 function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
 function cleanSummary(html){try{return html.replace(/<[^>]+>/g,'').trim();}catch(e){return (html||'').toString();}}
@@ -128,23 +130,14 @@ async function fetchFeed(url){
   }catch(e){console.error('Fetch error', url, e); return [];}
 }
 
-async function fetchArticles(){
-  document.getElementById('status').textContent = 'Fetching news, please wait…';
-  document.getElementById('feed').innerHTML = '';
-  allArticles=[]; isSearchActive=false; document.getElementById('searchInput').value='';
-  const btn = document.querySelector('.toolbar button');
-  const results = await Promise.all(RSS_FEEDS.map(url=>fetchFeed(url)));
-  results.forEach(arr=>allArticles = allArticles.concat(arr));
-  allArticles.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
-  document.getElementById('status').textContent = `Displaying ${allArticles.length} articles.`;
-  render(allArticles);
-}
 
-function render(articles){
+function renderPage(articles, page){
   const feed = document.getElementById('feed');
   feed.innerHTML = '';
-  if(!articles.length){feed.innerHTML='<div class="empty">No articles found.</div>'; return;}
-  articles.forEach(a=>{
+  if(!articles.length){feed.innerHTML='<div class="empty">No articles found.</div>'; buildPagination(0,page); return;}
+  const start = (page-1)*PER_PAGE;
+  const slice = articles.slice(start, start+PER_PAGE);
+  slice.forEach(a=>{
     const art = document.createElement('article');
     art.innerHTML = `<h2><a href="${escapeHtml(a.link)}" target="_blank" rel="noopener">${escapeHtml(a.title)}</a></h2>
       <div class="meta">Source: ${escapeHtml(a.source)} — ${escapeHtml(a.date||'No date')}</div>
@@ -152,6 +145,30 @@ function render(articles){
       <span class="tag">News</span>`;
     feed.appendChild(art);
   });
+  buildPagination(articles.length, page);
+}
+function render(articles){currentPage=1; renderPage(articles, currentPage);}
+function buildPagination(total, page){
+  const pages = Math.max(1, Math.ceil(total/PER_PAGE));
+  let html = '<div id="pagination" style="margin-top:1.5rem;text-align:center;font-size:.95rem;">';
+  html += `<button onclick="goPage(${page-1})" ${page<=1?'disabled style="opacity:.4;cursor:default;"':''}>Previous</button>`;
+  for(let i=1;i<=pages;i++){
+    if(i===page) html += ` <strong style="margin:0 .3rem;">${i}</strong>`;
+    else html += ` <a href="#" onclick="goPage(${i});return false;" style="margin:0 .3rem;color:var(--accent);text-decoration:none;">${i}</a>`;
+  }
+  html += `<button onclick="goPage(${page+1})" ${page>=pages?'disabled style="opacity:.4;cursor:default;"':''}>Next</button>`;
+  html += '</div>';
+  document.getElementById('pagination')?.remove();
+  document.getElementById('feed').insertAdjacentHTML('afterend', html);
+}
+function goPage(n){
+  const total = (isSearchActive ? allArticles.filter(a=> (a.title||'').toLowerCase().includes(document.getElementById('searchInput').value.trim().toLowerCase()) || (a.summary||'').toLowerCase().includes(document.getElementById('searchInput').value.trim().toLowerCase())) : allArticles).length;
+  const pages = Math.max(1, Math.ceil(total/PER_PAGE));
+  if(n<1||n>pages) return;
+  currentPage = n;
+  const list = isSearchActive ? allArticles.filter(a=> (a.title||'').toLowerCase().includes(document.getElementById('searchInput').value.trim().toLowerCase()) || (a.summary||'').toLowerCase().includes(document.getElementById('searchInput').value.trim().toLowerCase())) : allArticles;
+  renderPage(list, currentPage);
+  document.getElementById('feed').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function performSearch(){
@@ -160,9 +177,21 @@ function performSearch(){
   isSearchActive = true;
   const filtered = allArticles.filter(a=> (a.title||'').toLowerCase().includes(q) || (a.summary||'').toLowerCase().includes(q));
   document.getElementById('status').textContent = `Search: ${filtered.length} results for "${q}"`;
-  render(filtered);
+  currentPage = 1; renderPage(filtered, currentPage);
 }
-function clearSearch(){isSearchActive=false; document.getElementById('searchInput').value=''; document.getElementById('status').textContent = `Displaying ${allArticles.length} articles.`; render(allArticles);}
+function clearSearch(){isSearchActive=false; document.getElementById('searchInput').value=''; document.getElementById('status').textContent = `Displaying ${allArticles.length} articles.`; currentPage=1; renderPage(allArticles, currentPage);}
+function fetchArticles(){
+  document.getElementById('status').textContent = 'Fetching news, please wait…';
+  document.getElementById('feed').innerHTML = '';
+  allArticles=[]; isSearchActive=false; currentPage=1; document.getElementById('searchInput').value='';
+  const results = Promise.all(RSS_FEEDS.map(url=>fetchFeed(url)));
+  results.then(async arr=>{
+    arr.forEach(list=>allArticles = allArticles.concat(list));
+    allArticles.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
+    document.getElementById('status').textContent = `Displaying ${allArticles.length} articles.`;
+    renderPage(allArticles, currentPage);
+  });
+}
 </script>
 <script>document.addEventListener('DOMContentLoaded',()=>{fetchArticles();});</script>
 </body>
