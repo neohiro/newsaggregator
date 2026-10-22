@@ -166,7 +166,7 @@ async function fetchFeed(url){
     items.forEach(it=>{
       const title=it.querySelector('title')?.textContent||'No Title';
       const link=it.querySelector('link')?.textContent||'#';
-      const summary=it.querySelector('description')?.textContent||it.querySelector('summary')?.textContent||'No summary.';
+      const summary=it.querySelector('description')?.textContent||it.querySelector('summary')?.textContent||it.querySelector('content\:encoded')?.textContent||'No summary.';
       const pub=it.querySelector('pubDate')?.textContent||'';
       out.push({title, link, summary: cleanSummary(summary), source: feedName, date: pub, id: Math.random().toString(36).slice(2)});
     });
