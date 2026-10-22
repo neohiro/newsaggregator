@@ -3,28 +3,43 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>neohiro — App Selector</title>
+<title>NewsAggregator — Webtool</title>
 <style>
   :root{--bg:#0b0d12;--surface:#13141a;--text:#e6e8f0;--accent:#3b82f6;--muted:#8a92a3;}
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45;padding:2rem 1.5rem;}
-  .container{max-width:720px;margin:0 auto;}
-  h1{font-size:1.75rem;font-weight:700;letter-spacing:-.02em;margin-bottom:1rem;}
-  #app-selector{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:1rem;}
-  #app-selector a{display:block;background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1rem;text-decoration:none;color:inherit;transition:transform .05s ease,border-color .15s ease;}
-  #app-selector a:hover{border-color:rgba(59,130,246,.6);transform:translateY(-2px);}
-  #app-selector h2{font-size:1rem;font-weight:600;margin-bottom:.25rem;}
-  #app-selector p{font-size:.85rem;color:var(--muted);}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45;}
+  header{padding:2rem 1.5rem 1rem;max-width:860px;margin:0 auto;}
+  header h1{font-size:2rem;letter-spacing:-.02em;font-weight:700;}
+  header p{color:var(--muted);margin-top:.25rem;}
+  .container{max-width:860px;margin:0 auto;padding:0 1.5rem 3rem;}
+  .app-selector{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:1rem;}
+  .app-selector a{display:block;background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1rem;text-decoration:none;color:inherit;transition:transform .05s ease,border-color .15s ease;}
+  .app-selector a:hover{border-color:rgba(59,130,246,.6);transform:translateY(-2px);}
+  .app-selector h2{font-size:1rem;font-weight:600;margin-bottom:.25rem;}
+  .app-selector p{font-size:.85rem;color:var(--muted);}
   .badge{display:inline-block;padding:.15rem .4rem;border-radius:6px;font-size:.75rem;background:#3b82f6;color:#fff;margin-top:.5rem;}
+  .feed{display:grid;gap:1rem;margin-top:2rem;}
+  article{background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:1rem 1.25rem;}
+  article h2{font-size:1.05rem;font-weight:600;margin-bottom:.25rem;}
+  article .meta{font-size:.8rem;color:var(--muted);margin-bottom:.5rem;}
+  article p{color:#c2c6d6;font-size:.95rem;}
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  .tag{display:inline-block;padding:.15rem .45rem;border-radius:9999px;font-size:.75rem;background:rgba(59,130,246,.15);color:#93c5fd;margin-top:.5rem;}
+  hr{border:0;border-top:1px solid rgba(255,255,255,.08);margin:2rem 0;}
+  h2.section{font-size:1.25rem;font-weight:700;margin-top:2rem;margin-bottom:.5rem;letter-spacing:-.01em;}
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>App Selector</h1>
-  <p>Choose an app/webtool from the grid below.</p>
+<header>
+  <h1>NewsAggregator</h1>
+  <p>Single-page webtool at <code>neohiro.github.io/NewsAggregator</code></p>
+</header>
 
-  <div id="app-selector" role="list" aria-label="App selector">
-    <a href="./newsaggregator/" role="listitem" aria-label="NewsAggregator webtool">
+<div class="container">
+  <h2 class="section" id="app-selector">App Selector</h2>
+  <div class="app-selector" role="list" aria-label="App selector">
+    <a href="#webtool" role="listitem" aria-label="NewsAggregator webtool">
       <h2>NewsAggregator</h2>
       <p>Aggregated news feed and webtool view.</p>
       <span class="badge">Webtool</span>
@@ -35,6 +50,24 @@
       <span class="badge">Repo</span>
     </a>
   </div>
+
+  <hr />
+
+  <h2 class="section" id="webtool">Webtool</h2>
+  <section aria-label="Aggregated feed" class="feed">
+    <article>
+      <h2><a href="https://github.com/neohiro/NewsAggregator">NewsAggregator repo</a></h2>
+      <div class="meta">Source: github.com/neohiro/NewsAggregator • Updated today</div>
+      <p>Aggregated news and updates from the project. Use this webtool to browse feeds, filter by source, and read summaries.</p>
+      <span class="tag">Webtool</span>
+    </article>
+    <article>
+      <h2>Quick actions</h2>
+      <div class="meta">Built for <code>neohiro.github.io/newsaggregator</code></div>
+      <p>Refresh feed · Filter by tag · Export as JSON · Subscribe via RSS.</p>
+      <span class="tag">Beta</span>
+    </article>
+  </section>
 </div>
 </body>
 </html>
