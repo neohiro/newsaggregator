@@ -49,34 +49,29 @@
 </head>
 <body>
 <header>
-  <div class="header-inner">
+  <div class="header-inner" style="align-items:center;gap:1rem;">
     <div>
       <h1>NewsAggregator — Live Global Feed</h1>
       <div class="subtitle">Ported webtool · 60+ international sources · Search / Filter / Export</div>
     </div>
-    <div style="color:var(--muted);font-size:.8rem;">Last load: <span id="lastLoad">—</span></div>
+    <div class="toolbar" style="flex:1 1 auto;max-width:640px;margin-left:auto;">
+      <input id="searchInput" type="text" placeholder="Search headlines, summaries, sources… (type / Enter)" aria-label="Search" onkeydown="if(event.key==='Enter'){performSearch();}" />
+      <button onclick="performSearch()">Search</button>
+      <button class="secondary" onclick="clearSearch()">Clear</button>
+      <button onclick="fetchArticles()">Refresh</button>
+      <button class="secondary" onclick="exportJSON()">Export JSON</button>
+    </div>
   </div>
 </header>
 
 <div class="container">
   <div class="tags" id="sourceTags" role="region" aria-label="Source filters"></div>
 
-  <div class="toolbar">
-    <input id="searchInput" type="text" placeholder="Search headlines, summaries, sources… (type / Enter)" aria-label="Search" onkeydown="if(event.key==='Enter'){performSearch();}" />
-    <button onclick="performSearch()">Search</button>
-    <button class="secondary" onclick="clearSearch()">Clear</button>
-    <button onclick="fetchArticles()">Refresh</button>
-    <button class="secondary" onclick="exportJSON()">Export JSON</button>
-  </div>
-  <div id="status" class="status">Ready — click Refresh to load feeds.</div>
+  <div class="tags" id="sourceTags" role="region" aria-label="Source filters"></div>
 
   <section id="feed" class="feed" aria-label="Aggregated feed"></section>
+  <div id="status" class="status">Ready — click Refresh to load feeds.</div>
   <div id="pagination" class="pagination" aria-label="Pagination"></div>
-
-  <div class="actions">
-    <button class="secondary" onclick="goPage(1)">First page</button>
-    <button onclick="fetchArticles()">Refresh all</button>
-  </div>
 </div>
 
 <script>
