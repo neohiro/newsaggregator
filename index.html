@@ -154,5 +154,6 @@ function performSearch(){
 }
 function clearSearch(){isSearchActive=false; document.getElementById('searchInput').value=''; document.getElementById('status').textContent = `Displaying ${allArticles.length} articles.`; render(allArticles);}
 </script>
+<script>document.addEventListener('DOMContentLoaded',()=>{fetchArticles();});</script>
 </body>
 </html>
