@@ -154,7 +154,7 @@ function fetchArticles(){
   allArticles=[];isSearchActive=false;currentTag='';currentPage=1;document.getElementById('searchInput').value='';
   loadFromJSON();
 }
-function exportJSON(){const blob=new Blob([JSON.stringify(allArticles,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='newsaggregator-'+new Date().toISOString().slice(0,10)+'.json';a.click();}
+function exportJSON(){const payload={exportedAt:new Date().toISOString(),articles:allArticles};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='newsaggregator-'+new Date().toISOString().slice(0,10)+'.json';a.click();}
 </script>
 <script>document.addEventListener('DOMContentLoaded',()=>{fetchArticles();document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter'){performSearch();}});});</script>
 </body>
