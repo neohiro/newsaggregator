@@ -3,45 +3,52 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>NewsAggregator — Webtool</title>
+<title>NewsAggregator — Global News Feed</title>
 <style>
-  :root{--bg:#0b0d12;--surface:#13141a;--text:#e6e8f0;--accent:#3b82f6;--muted:#8a92a3;}
+  :root{--bg:#23272a;--surface:#40444b;--text:#fff;--accent:#7289da;--muted:#99aab5;--frame:#2c2f33;}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45;}
-  header{padding:2rem 1.5rem 1rem;max-width:860px;margin:0 auto;}
-  header h1{font-size:2rem;letter-spacing:-.02em;font-weight:700;}
-  header p{color:var(--muted);margin-top:.25rem;}
-  .container{max-width:860px;margin:0 auto;padding:0 1.5rem 3rem;}
+  header{padding:2rem 1.5rem 1rem;max-width:980px;margin:0 auto;border-bottom:1px solid rgba(255,255,255,.08);}
+  header h1{font-size:1.8rem;font-weight:700;letter-spacing:-.02em;color:var(--accent);}
+  header p{color:var(--muted);margin-top:.25rem;font-size:.9rem;}
+  .container{max-width:980px;margin:0 auto;padding:1.5rem;}
+  .toolbar{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-bottom:1rem;}
+  input,button{font-family:inherit;font-size:.95rem;padding:.5rem .75rem;border-radius:6px;border:none;outline:none;}
+  input{flex:1 1 240px;background:var(--frame);color:var(--text);border:1px solid rgba(255,255,255,.1);}
+  button{cursor:pointer;background:var(--accent);color:#fff;font-weight:600;transition:filter .15s;}
+  button:hover{filter:brightness(1.1);}
+  button.secondary{background:var(--surface);color:var(--text);}
+  .status{color:var(--muted);font-size:.85rem;margin-bottom:.75rem;min-height:1.2rem;}
+  .feed{display:grid;gap:.75rem;}
+  article{background:var(--surface);border-radius:10px;padding:1rem 1.25rem;border:1px solid rgba(255,255,255,.06);}
+  article h2{font-size:1.05rem;font-weight:600;margin-bottom:.2rem;line-height:1.2;}
+  article h2 a{color:var(--accent);text-decoration:none;}
+  article h2 a:hover{text-decoration:underline;}
+  .meta{font-size:.78rem;color:var(--muted);margin-bottom:.5rem;}
+  article p{color:#dcdde3;font-size:.92rem;line-height:1.35;}
+  .tag{display:inline-block;padding:.15rem .45rem;border-radius:9999px;font-size:.7rem;background:rgba(114,137,218,.2);color:#c7d0ff;margin-top:.5rem;}
+  .empty{color:var(--muted);font-style:italic;padding:1rem 0;}
+  hr{border:0;border-top:1px solid rgba(255,255,255,.08);margin:1.5rem 0;}
   .app-selector{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:1rem;}
   .app-selector a{display:block;background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1rem;text-decoration:none;color:inherit;transition:transform .05s ease,border-color .15s ease;}
-  .app-selector a:hover{border-color:rgba(59,130,246,.6);transform:translateY(-2px);}
+  .app-selector a:hover{border-color:rgba(114,137,218,.6);transform:translateY(-2px);}
   .app-selector h2{font-size:1rem;font-weight:600;margin-bottom:.25rem;}
   .app-selector p{font-size:.85rem;color:var(--muted);}
-  .badge{display:inline-block;padding:.15rem .4rem;border-radius:6px;font-size:.75rem;background:#3b82f6;color:#fff;margin-top:.5rem;}
-  .feed{display:grid;gap:1rem;margin-top:2rem;}
-  article{background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:1rem 1.25rem;}
-  article h2{font-size:1.05rem;font-weight:600;margin-bottom:.25rem;}
-  article .meta{font-size:.8rem;color:var(--muted);margin-bottom:.5rem;}
-  article p{color:#c2c6d6;font-size:.95rem;}
-  a{color:var(--accent);text-decoration:none;}
-  a:hover{text-decoration:underline;}
-  .tag{display:inline-block;padding:.15rem .45rem;border-radius:9999px;font-size:.75rem;background:rgba(59,130,246,.15);color:#93c5fd;margin-top:.5rem;}
-  hr{border:0;border-top:1px solid rgba(255,255,255,.08);margin:2rem 0;}
-  h2.section{font-size:1.25rem;font-weight:700;margin-top:2rem;margin-bottom:.5rem;letter-spacing:-.01em;}
+  .badge{display:inline-block;padding:.15rem .4rem;border-radius:6px;font-size:.75rem;background:var(--accent);color:#fff;margin-top:.5rem;}
 </style>
 </head>
 <body>
 <header>
   <h1>NewsAggregator</h1>
-  <p>Single-page webtool at <code>neohiro.github.io/NewsAggregator</code></p>
+  <p>Global News Feed with search — ported to webtool at <code>neohiro.github.io/NewsAggregator</code></p>
 </header>
 
 <div class="container">
-  <h2 class="section" id="app-selector">App Selector</h2>
+  <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:.5rem;">App Selector</h2>
   <div class="app-selector" role="list" aria-label="App selector">
     <a href="#webtool" role="listitem" aria-label="NewsAggregator webtool">
       <h2>NewsAggregator</h2>
-      <p>Aggregated news feed and webtool view.</p>
+      <p>Aggregated news feed and webtool.</p>
       <span class="badge">Webtool</span>
     </a>
     <a href="https://github.com/neohiro/mesh-inference" role="listitem" aria-label="mesh-inference repo">
@@ -53,21 +60,99 @@
 
   <hr />
 
-  <h2 class="section" id="webtool">Webtool</h2>
-  <section aria-label="Aggregated feed" class="feed">
-    <article>
-      <h2><a href="https://github.com/neohiro/NewsAggregator">NewsAggregator repo</a></h2>
-      <div class="meta">Source: github.com/neohiro/NewsAggregator • Updated today</div>
-      <p>Aggregated news and updates from the project. Use this webtool to browse feeds, filter by source, and read summaries.</p>
-      <span class="tag">Webtool</span>
-    </article>
-    <article>
-      <h2>Quick actions</h2>
-      <div class="meta">Built for <code>neohiro.github.io/newsaggregator</code></div>
-      <p>Refresh feed · Filter by tag · Export as JSON · Subscribe via RSS.</p>
-      <span class="tag">Beta</span>
-    </article>
-  </section>
+  <h2 id="webtool" style="font-size:1.25rem;font-weight:700;margin-bottom:.5rem;">Webtool</h2>
+  <div class="toolbar">
+    <input id="searchInput" type="text" placeholder="Search headlines / summaries…" aria-label="Search" />
+    <button onclick="performSearch()">Search</button>
+    <button class="secondary" onclick="clearSearch()">Clear</button>
+    <button onclick="fetchArticles()">Refresh</button>
+  </div>
+  <div id="status" class="status">Ready — click Refresh to load feeds.</div>
+  <section id="feed" class="feed" aria-label="Aggregated feed"></section>
 </div>
+
+<script>
+const RSS_FEEDS = [
+  "https://feeds.bbci.co.uk/news/world/rss.xml",
+  "https://feeds.nbcnews.com/nbcnews/public/news",
+  "https://www.nytimes.com/svc/collections/v1/publish/https://www.nytimes.com/section/world/rss.xml",
+  "https://feeds.washingtonpost.com/rss/world",
+  "https://globalnews.ca/world/feed/",
+  "http://www.buenosairesherald.com/rss",
+  "http://www.theguardian.com/world/rss",
+  "https://www.france24.com/en/rss",
+  "https://www.spiegel.de/international/index.rss",
+  "https://www.euronews.com/rss?format=mrss&level=theme&name=news",
+  "https://www.independent.co.uk/news/world/rss",
+  "https://www.aljazeera.com/xml/rss/all.xml",
+  "https://www.japantimes.co.jp/feed/top-stories/",
+  "https://www.scmp.com/rss/91/feed",
+  "https://timesofindia.indiatimes.com/rssfeeds/296589292.cms",
+  "https://mg.co.za/feed/",
+  "https://www.dailynewsegypt.com/feed/",
+  "https://www.smh.com.au/rss/world.xml"
+];
+let allArticles = [];
+let isSearchActive = false;
+
+function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+function cleanSummary(html){try{return html.replace(/<[^>]+>/g,'').trim();}catch(e){return (html||'').toString();}}
+
+async function fetchFeed(url){
+  try{
+    const r = await fetch(url, {mode:'cors'});
+    if(!r.ok) return [];
+    const text = await r.text();
+    const xml = new DOMParser().parseFromString(text, 'application/xml');
+    const items = xml.querySelectorAll('item');
+    const feedName = xml.querySelector('channel > title')?.textContent || url;
+    const out=[];
+    items.forEach(it=>{
+      const title=it.querySelector('title')?.textContent||'No Title';
+      const link=it.querySelector('link')?.textContent||'#';
+      const summary=it.querySelector('description')?.textContent||it.querySelector('summary')?.textContent||'No summary.';
+      const pub=it.querySelector('pubDate')?.textContent||'';
+      out.push({title, link, summary: cleanSummary(summary), source: feedName, date: pub, id: Math.random().toString(36).slice(2)});
+    });
+    return out;
+  }catch(e){console.error('Fetch error', url, e); return [];}
+}
+
+async function fetchArticles(){
+  document.getElementById('status').textContent = 'Fetching news, please wait…';
+  document.getElementById('feed').innerHTML = '';
+  allArticles=[]; isSearchActive=false; document.getElementById('searchInput').value='';
+  const btn = document.querySelector('.toolbar button');
+  const results = await Promise.all(RSS_FEEDS.map(url=>fetchFeed(url)));
+  results.forEach(arr=>allArticles = allArticles.concat(arr));
+  allArticles.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
+  document.getElementById('status').textContent = `Displaying ${allArticles.length} articles.`;
+  render(allArticles);
+}
+
+function render(articles){
+  const feed = document.getElementById('feed');
+  feed.innerHTML = '';
+  if(!articles.length){feed.innerHTML='<div class="empty">No articles found.</div>'; return;}
+  articles.forEach(a=>{
+    const art = document.createElement('article');
+    art.innerHTML = `<h2><a href="${escapeHtml(a.link)}" target="_blank" rel="noopener">${escapeHtml(a.title)}</a></h2>
+      <div class="meta">Source: ${escapeHtml(a.source)} — ${escapeHtml(a.date||'No date')}</div>
+      <p>${escapeHtml(a.summary)}</p>
+      <span class="tag">News</span>`;
+    feed.appendChild(art);
+  });
+}
+
+function performSearch(){
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  if(!q){clearSearch(); return;}
+  isSearchActive = true;
+  const filtered = allArticles.filter(a=> (a.title||'').toLowerCase().includes(q) || (a.summary||'').toLowerCase().includes(q));
+  document.getElementById('status').textContent = `Search: ${filtered.length} results for "${q}"`;
+  render(filtered);
+}
+function clearSearch(){isSearchActive=false; document.getElementById('searchInput').value=''; document.getElementById('status').textContent = `Displaying ${allArticles.length} articles.`; render(allArticles);}
+</script>
 </body>
 </html>
