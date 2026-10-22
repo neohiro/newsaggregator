@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>neohiro — App Selector</title>
+<style>
+  :root{--bg:#0b0d12;--surface:#13141a;--text:#e6e8f0;--accent:#3b82f6;--muted:#8a92a3;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45;padding:2rem 1.5rem;}
+  .container{max-width:720px;margin:0 auto;}
+  h1{font-size:1.75rem;font-weight:700;letter-spacing:-.02em;margin-bottom:1rem;}
+  #app-selector{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:1rem;}
+  #app-selector a{display:block;background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1rem;text-decoration:none;color:inherit;transition:transform .05s ease,border-color .15s ease;}
+  #app-selector a:hover{border-color:rgba(59,130,246,.6);transform:translateY(-2px);}
+  #app-selector h2{font-size:1rem;font-weight:600;margin-bottom:.25rem;}
+  #app-selector p{font-size:.85rem;color:var(--muted);}
+  .badge{display:inline-block;padding:.15rem .4rem;border-radius:6px;font-size:.75rem;background:#3b82f6;color:#fff;margin-top:.5rem;}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>App Selector</h1>
+  <p>Choose an app/webtool from the grid below.</p>
+
+  <div id="app-selector" role="list" aria-label="App selector">
+    <a href="./newsaggregator/" role="listitem" aria-label="NewsAggregator webtool">
+      <h2>NewsAggregator</h2>
+      <p>Aggregated news feed and webtool view.</p>
+      <span class="badge">Webtool</span>
+    </a>
+    <a href="https://github.com/neohiro/mesh-inference" role="listitem" aria-label="mesh-inference repo">
+      <h2>mesh-inference</h2>
+      <p>LoRa mesh bot firmware.</p>
+      <span class="badge">Repo</span>
+    </a>
+  </div>
+</div>
+</body>
+</html>
