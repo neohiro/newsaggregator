@@ -90,8 +90,7 @@ function cleanSummary(html){try{return html.replace(/<[^>]+>/g,'').trim();}catch
 
 async function fetchFeed(url){
   try{
-    const proxyUrl="https://api.allorigins.win/raw?url="+encodeURIComponent(url);
-    const r=await fetch(proxyUrl,{mode:'cors'});
+    const r = await fetch(url, {mode:'cors'});
     if(!r.ok) return [];
     const text=await r.text();
     const xml=new DOMParser().parseFromString(text,'application/xml');
