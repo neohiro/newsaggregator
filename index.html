@@ -80,13 +80,14 @@ function escapeHtml(t){const d=document.createElement('div');d.textContent=t;ret
 function cleanSummary(html){try{return html.replace(/<[^>]+>/g,'').trim();}catch(e){return (html||'').toString();}}
 
 function loadFromJSON(){
-  fetch('articles.json',{cache:'no-store'}).then(r=>r.json()).then(data=>{
+  fetch('./articles.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(data=>{
+    if(!Array.isArray(data)) throw new Error('Invalid JSON format');
     allArticles=data.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
     document.getElementById('status').textContent=`Displaying ${allArticles.length} articles.`;
     document.getElementById('lastLoad').textContent=new Date().toLocaleString();
     buildTags();
     renderPage(allArticles,currentPage);
-  }).catch(e=>{document.getElementById('status').textContent='Failed to load articles.json. Refresh to retry.';console.error(e);});
+  }).catch(e=>{document.getElementById('status').textContent='Failed to load articles.json — try Refresh.';console.error(e);});
 }
 
 function renderPage(articles,page){
